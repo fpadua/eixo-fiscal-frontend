@@ -1,0 +1,13 @@
+
+> frontend@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.2 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.204:3000
+✓ Ready in 570ms
+
+⚠ Slow filesystem detected. The benchmark took 565ms. If D:\Home\app-nfs\frontend\.next/dev is a network drive, consider moving it to a local folder.
+See more: https://nextjs.org/docs/app/guides/local-development
+ GET /emitir?clienteId=f73e0c65-d57a-4e92-9a0e-7a715ca1be11 200 in 434ms (next.js: 193ms, application-code: 241ms)
+ GET /emitir 200 in 51ms (next.js: 5ms, application-code: 46ms)
