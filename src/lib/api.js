@@ -2,18 +2,17 @@ import axios from 'axios';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || (() => {
   if (typeof window === 'undefined') return 'http://localhost:3001';
-  const hostname = window.location.hostname;
-  const protocol = window.location.protocol;
-  if (hostname === 'localhost' || hostname === '127.0.0.1') return 'http://localhost:3001';
-  // Se a página foi carregada via HTTPS, usa HTTPS para o backend
-  if (protocol === 'https:') return `https://${hostname}:3443`;
-  return `http://${hostname}:3001`;
+  // Produção: URL fixa do Render
+  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    return 'https://eixo-fiscal-backend.onrender.com';
+  }
+  return 'http://localhost:3001';
 })();
 
 const getApiUrl = () => `${BACKEND_URL}/api`;
 
-const SETTINGS_STORAGE_KEY = 'app-nfs-settings';
-const REFRESH_TOKEN_KEY = 'app-nfs-refresh';
+const SETTINGS_STORAGE_KEY = '9de8e26766b832dce1a75b22ea5bf7f3525e319a85561d733d77dc2f13d2a7fd';
+const REFRESH_TOKEN_KEY = 'a53406e1e82fc55d1e59d4c54a0428738c0154669285e6df755d619ed3564ca6';
 const DEFAULT_NFSE_VERSION = process.env.NEXT_PUBLIC_NFSE_VERSION || 'v1';
 
 // Access token em memória (não persiste em localStorage)
@@ -77,7 +76,7 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    
+
     if (error.response?.status === 401 && !originalRequest._retry && refreshToken) {
       originalRequest._retry = true;
 
@@ -128,7 +127,7 @@ export const authApi = {
   verifyEmail: (token) => api.get(`/auth/verify?token=${token}`),
   refresh: (refreshToken) => api.post('/auth/refresh', { refreshToken }),
   profile: () => api.get('/auth/profile'),
-  changePassword: (oldPassword, newPassword) => 
+  changePassword: (oldPassword, newPassword) =>
     api.post('/auth/change-password', { oldPassword, newPassword }),
   revokeTokens: () => api.post('/auth/revoke-tokens'),
   registerTenant: (data) => api.post('/auth/tenant/register', data),
