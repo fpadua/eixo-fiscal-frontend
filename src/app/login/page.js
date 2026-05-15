@@ -1,15 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
-import { Lock, User, Eye, EyeOff, ArrowRight, LogOut, CheckCircle, Building2 } from 'lucide-react';
+import { Lock, User, Eye, EyeOff, ArrowRight, LogOut, CheckCircle, Building2, Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { login, user } = useAuth();
@@ -189,5 +189,17 @@ export default function LoginPage() {
         <span>Goiânia</span>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="h-screen bg-gray-50 flex items-center justify-center">
+        <Loader2 size={40} className="animate-spin text-indigo-600" />
+      </div>
+    }>
+      <LoginContent />
+    </Suspense>
   );
 }

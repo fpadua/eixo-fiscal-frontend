@@ -13,6 +13,7 @@ const getApiUrl = () => `${BACKEND_URL}/api`;
 
 const SETTINGS_STORAGE_KEY = '9de8e26766b832dce1a75b22ea5bf7f3525e319a85561d733d77dc2f13d2a7fd';
 const REFRESH_TOKEN_KEY = 'a53406e1e82fc55d1e59d4c54a0428738c0154669285e6df755d619ed3564ca6';
+const USER_STORAGE_KEY = '7f8a2b1c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0';
 const DEFAULT_NFSE_VERSION = process.env.NEXT_PUBLIC_NFSE_VERSION || 'v1';
 
 // Access token em memória (não persiste em localStorage)
@@ -45,6 +46,19 @@ const setRefreshToken = (token) => {
     if (token) localStorage.setItem(REFRESH_TOKEN_KEY, token);
     else localStorage.removeItem(REFRESH_TOKEN_KEY);
   }
+};
+const setUser = (user) => {
+  if (typeof window !== 'undefined') {
+    if (user) localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user));
+    else localStorage.removeItem(USER_STORAGE_KEY);
+  }
+};
+const getUser = () => {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = localStorage.getItem(USER_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch { return null; }
 };
 
 let isRefreshing = false;
@@ -267,5 +281,7 @@ export const nfseApi = {
   },
 };
 
-export { getRefreshToken, setAccessToken, setRefreshToken };
+const getAuth = () => ({ user: getUser() });
+
+export { getRefreshToken, setAccessToken, setRefreshToken, setUser, getUser, getAuth };
 export default api;

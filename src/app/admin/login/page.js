@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Lock, User, Eye, EyeOff, ArrowRight, Shield } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { authApi, setAccessToken, setRefreshToken } from '@/lib/api';
+import { authApi, setAccessToken, setRefreshToken, setUser } from '@/lib/api';
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -28,6 +28,7 @@ export default function AdminLoginPage() {
       }
       setAccessToken(token);
       setRefreshToken(refreshToken);
+      setUser(user);
       router.push('/admin');
     } catch (err) {
       setError(err.response?.data?.erro || 'Erro ao fazer login');
