@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { nfseApi, getAuth } from '@/lib/api';
 import AdminSidebar from '@/components/AdminSidebar';
-import { Search } from 'lucide-react';
+import { Search, Lock } from 'lucide-react';
+import AdminChangePasswordDialog from '@/components/AdminChangePasswordDialog';
 
 export default function AdminUsuarios() {
   const router = useRouter();
@@ -13,6 +14,7 @@ export default function AdminUsuarios() {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
+  const [passwordUser, setPasswordUser] = useState(null);
 
   useEffect(() => {
     const auth = getAuth();
@@ -64,7 +66,13 @@ export default function AdminUsuarios() {
                 <td className="p-4 text-center">
                   <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${u.status === 'active' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}`}>{u.status}</span>
                 </td>
-                <td className="p-4 text-right">
+                <td className="p-4 text-right space-x-2">
+                  <button
+                    onClick={() => setPasswordUser(u)}
+                    className="px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-500/20 text-indigo-400 hover:bg-indigo-500/30 transition-colors"
+                  >
+                    <Lock size={12} className="inline mr-1" /> Senha
+                  </button>
                   {u.role !== 'master' && (
                     <button
                       onClick={async () => {
@@ -93,6 +101,11 @@ export default function AdminUsuarios() {
           <button disabled={page >= Math.ceil(total / 50)} onClick={() => setPage(p => p + 1)} className="px-4 py-2 rounded-lg bg-gray-800 text-gray-300 text-sm disabled:opacity-40 hover:bg-gray-700">Próxima</button>
         </div>
       )}
+      <AdminChangePasswordDialog
+        open={!!passwordUser}
+        user={passwordUser}
+        onClose={() => setPasswordUser(null)}
+      />
     </AdminSidebar>
   );
 }

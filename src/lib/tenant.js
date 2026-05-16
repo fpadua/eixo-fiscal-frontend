@@ -22,7 +22,7 @@ export function getTenantFromHostname() {
 export function getTenantFromParams() {
   if (typeof window === 'undefined') return null;
   const params = new URLSearchParams(window.location.search);
-  return params.get('tenant') || null;
+  return params.get('tenant') || params.get('sudominio') || null;
 }
 
 export function getTenantFromURL() {

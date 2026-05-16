@@ -61,6 +61,11 @@ const getUser = () => {
   } catch { return null; }
 };
 
+const getLoginRedirect = () => {
+  if (typeof window === 'undefined') return '/login';
+  return window.location.pathname.startsWith('/admin') ? '/admin/login' : '/login';
+};
+
 let isRefreshing = false;
 let refreshSubscribers = [];
 
@@ -115,7 +120,7 @@ api.interceptors.response.use(
         setAccessToken(null);
         setRefreshToken(null);
         if (typeof window !== 'undefined' && !window.location.pathname.includes('/login')) {
-          window.location.href = '/login';
+          window.location.href = getLoginRedirect();
         }
         return Promise.reject(refreshError);
       } finally {
@@ -126,8 +131,8 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       setAccessToken(null);
       setRefreshToken(null);
-      if (typeof window !== 'undefined' && !window.location.pathname.includes('/login') && !window.location.pathname.includes('/admin/login')) {
-        window.location.href = '/login';
+      if (typeof window !== 'undefined' && !window.location.pathname.includes('/login')) {
+        window.location.href = getLoginRedirect();
       }
     }
 
@@ -278,6 +283,8 @@ export const nfseApi = {
     criarPlano: (data) => api.post('/admin/planos', data),
     atualizarPlano: (id, data) => api.put(`/admin/planos/${id}`, data),
     deletarPlano: (id) => api.delete(`/admin/planos/${id}`),
+    changeUserPassword: (userId, newPassword) =>
+      api.post(`/admin/usuarios/${userId}/change-password`, { newPassword }),
   },
 };
 

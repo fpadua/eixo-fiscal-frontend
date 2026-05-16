@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { 
@@ -12,10 +13,12 @@ import {
   Settings,
   FileText,
   User,
-  LogOut
+  LogOut,
+  Lock
 } from 'lucide-react';
 import { useSettings } from '@/contexts/SettingsContext';
 import { useAuth } from '@/contexts/AuthContext';
+import ChangePasswordDialog from '@/components/ChangePasswordDialog';
 
 const links = [
   { href: '/', icon: LayoutDashboard, label: 'Dashboard' },
@@ -35,6 +38,7 @@ export default function Sidebar() {
   const router = useRouter();
   const { settings, loaded } = useSettings();
   const { user, logout } = useAuth();
+  const [showChangePassword, setShowChangePassword] = useState(false);
   const isTestMode = loaded && settings.ambiente !== 'producao';
 
   const handleLogout = () => {
@@ -100,7 +104,10 @@ export default function Sidebar() {
           </div>
         )}
 
-        <div className="p-3 rounded-2xl bg-gray-50 border border-gray-100 flex items-center gap-3">
+        <button
+          onClick={() => setShowChangePassword(true)}
+          className="w-full p-3 rounded-2xl bg-gray-50 border border-gray-100 flex items-center gap-3 hover:bg-indigo-50 hover:border-indigo-100 transition-all text-left"
+        >
           <div className="w-10 h-10 rounded-full bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 shadow-sm shrink-0">
             <User size={18} strokeWidth={2.5} />
           </div>
@@ -108,7 +115,8 @@ export default function Sidebar() {
             <h4 className="text-xs font-bold text-gray-900 truncate">{user?.nome || 'Usuário'}</h4>
             <p className="text-[10px] text-gray-500 truncate">{user?.email || ''}</p>
           </div>
-        </div>
+          <Lock size={14} className="text-gray-300 shrink-0" />
+        </button>
 
         <div className="mt-4 px-3 flex items-center justify-between">
           <button 
@@ -121,6 +129,7 @@ export default function Sidebar() {
           <button className="text-[10px] font-black text-indigo-600 uppercase hover:underline">Ajuda</button>
         </div>
       </div>
+      <ChangePasswordDialog open={showChangePassword} onClose={() => setShowChangePassword(false)} />
     </aside>
   );
 }
