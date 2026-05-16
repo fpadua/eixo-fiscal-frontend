@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
 import { nfseApi } from '@/lib/api';
 import { 
   LayoutDashboard, 
@@ -27,6 +29,9 @@ import { Button } from '@/components/ui/button';
 import TenantEditModal from '@/components/TenantEditModal';
 
 export default function Dashboard() {
+  const router = useRouter();
+  const { user, loading: authLoading } = useAuth();
+
   const [status, setStatus] = useState(null);
   const [stats, setStats] = useState(null);
   const [invoices, setInvoices] = useState([]);
@@ -37,6 +42,13 @@ export default function Dashboard() {
   const [planStatus, setPlanStatus] = useState(null);
 
   useEffect(() => {
+    if (!authLoading && !user) {
+      router.replace('/login');
+    }
+  }, [authLoading, user, router]);
+
+  useEffect(() => {
+    if (!user) return;
     nfseApi.health()
       .then(r => setStatus(r.data))
       .catch(() => setStatus({ status: 'offline' }));
@@ -71,6 +83,16 @@ export default function Dashboard() {
     if (valor == null) return 'R$ 0,00';
     return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(valor));
   };
+
+  if (authLoading) {
+    return (
+      <div className="h-screen bg-gray-50 flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!user) return null;
 
   const emitidas = stats?.emitidas || 0;
   const canceladas = stats?.canceladas || 0;
