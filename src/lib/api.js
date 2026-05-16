@@ -136,7 +136,7 @@ api.interceptors.response.use(
 );
 
 export const authApi = {
-  login: (email, password) => api.post('/auth/login', { email, password }),
+  login: (email, password, tenant) => api.post('/auth/login', { email, password, ...(tenant ? { tenant } : {}) }),
   register: (data) => api.post('/auth/register', data),
   verifyEmail: (token) => api.get(`/auth/verify?token=${token}`),
   refresh: (refreshToken) => api.post('/auth/refresh', { refreshToken }),

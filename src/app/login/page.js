@@ -4,6 +4,7 @@ import { Suspense, useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
+import { getTenantFromURL, getStoredTenant } from '@/lib/tenant';
 import { Lock, User, Eye, EyeOff, ArrowRight, LogOut, CheckCircle, Building2, Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -18,12 +19,13 @@ function LoginContent() {
   const [error, setError] = useState(null);
   const [inactiveMessage, setInactiveMessage] = useState(false);
   const [cadastroOk, setCadastroOk] = useState(false);
-  const [hostname, setHostname] = useState('');
+  const [tenantIdentifier, setTenantIdentifier] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   useEffect(() => {
-    setHostname(window.location.hostname);
+    const detected = getTenantFromURL() || getStoredTenant();
+    if (detected) setTenantIdentifier(detected);
   }, []);
 
   useEffect(() => {
@@ -47,9 +49,9 @@ function LoginContent() {
     setError(null);
     setInactiveMessage(false);
 
-    try {
-      await login(email, password);
-      router.push('/');
+      try {
+        await login(email, password, tenantIdentifier || undefined);
+        router.push('/');
     } catch (err) {
       console.error('Login error:', err);
       setError(err.response?.data?.erro || 'Erro ao fazer login');
@@ -105,10 +107,10 @@ function LoginContent() {
               )}
 
               <div className="space-y-4">
-                {hostname && hostname !== 'localhost' && hostname !== '127.0.0.1' && (
+                {tenantIdentifier && (
                   <div className="p-3 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center gap-2">
                     <Building2 size={14} className="text-indigo-600 shrink-0" />
-                    <p className="text-xs font-bold text-indigo-700 truncate max-w-[200px]" title={hostname}>{hostname}</p>
+                    <p className="text-xs font-bold text-indigo-700 truncate max-w-[200px]" title={tenantIdentifier}>Subdominio: {tenantIdentifier}</p>
                   </div>
                 )}
                 <div className="space-y-2">
