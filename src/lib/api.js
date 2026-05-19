@@ -153,10 +153,9 @@ export const authApi = {
 };
 
 export const nfseApi = {
-  emitir: (dados) => {
-    const nfseVersion = getNfseVersion();
-    if (nfseVersion === 'v1') return api.post('/nfse/emitir-completo', dados);
-    return api.post('/v2/nfse/gerar', dados);
+  emitir: (dados, nfseVersion = 'v1') => {
+    if (nfseVersion === 'v2') return api.post('/nfse/emitir-completo', dados);
+    return api.post('/nfse/emitir', dados);
   },
   consultarPorRps: (numero, serie = 'A1', tipo = 1) => {
     const nfseVersion = getNfseVersion();

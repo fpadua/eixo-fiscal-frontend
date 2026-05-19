@@ -386,7 +386,7 @@ function EmitirForm() {
     const payload = buildPayload(data);
 
     try {
-      const resp = await nfseApi.emitir(payload);
+      const resp = await nfseApi.emitir(payload, nfseVersion);
       setResultado({ ok: true, dados: resp.data });
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err) {
