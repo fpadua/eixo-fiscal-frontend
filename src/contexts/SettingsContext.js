@@ -6,7 +6,7 @@ import { nfseApi } from '@/lib/api';
 const STORAGE_KEY = 'app-nfs-settings';
 
 const defaultSettings = {
-  nfseVersion: process.env.NEXT_PUBLIC_NFSE_VERSION || 'v1',
+  nfseVersion: process.env.NEXT_PUBLIC_NFSE_VERSION || 'v2',
   ambiente: 'homologacao', // padrão
 };
 

@@ -58,7 +58,7 @@ const SUBSTITUICAO_TEMPLATES = {
   },
   v2: {
     numeroDps: 123,
-    serieDps: '00001',
+    serieDps: '8',
     servico: {
       valorServicos: 100,
       aliquota: 2,
@@ -73,7 +73,7 @@ const SUBSTITUICAO_TEMPLATES = {
         logradouro: 'Rua Exemplo',
         numero: '100',
         bairro: 'Centro',
-        codigoMunicipio: '5208707',
+        codigoMunicipio: '5002704',
         municipio: 'Goiania',
         uf: 'GO',
         cep: '74000000',

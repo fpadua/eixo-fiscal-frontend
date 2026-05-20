@@ -88,7 +88,7 @@ function EmitirForm() {
       optanteSimplesNacional: 'false',
       exigibilidadeIss: '1',
       numeroDps: 1,
-      serieDps: '00001',
+      serieDps: '8',
       cTribNac: '010100',
       cNBS: '',
       regimeApuracao: '1',
@@ -263,7 +263,7 @@ function EmitirForm() {
           numero: data.numeroTomador,
           complemento: data.complementoTomador || '',
           bairro: data.bairroTomador,
-          codigoMunicipio: '5208707',
+          codigoMunicipio: '5002704',
           municipio: 'Goiania',
           uf: data.ufTomador || 'GO',
           cep: data.cepTomador,
@@ -672,11 +672,11 @@ function EmitirForm() {
                   </div>
                   <div className="form-group">
                     <Label className="text-[10px] font-bold uppercase text-gray-500">Cód. Local Prestação</Label>
-                    <Input placeholder="Ex: 5208707" className="h-12" {...register('cLocPrestacao')} />
+                    <Input placeholder="Ex: 5002704" className="h-12" {...register('cLocPrestacao')} />
                   </div>
                   <div className="form-group">
                     <Label className="text-[10px] font-bold uppercase text-gray-500">Cód. Mun. Incidência</Label>
-                    <Input placeholder="Ex: 5208707" className="h-12" {...register('codigoMunicipioIncidencia')} />
+                    <Input placeholder="Ex: 5002704" className="h-12" {...register('codigoMunicipioIncidencia')} />
                   </div>
                 </div>
               )}

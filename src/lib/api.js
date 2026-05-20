@@ -14,7 +14,7 @@ const getApiUrl = () => `${BACKEND_URL}/api`;
 const SETTINGS_STORAGE_KEY = '9de8e26766b832dce1a75b22ea5bf7f3525e319a85561d733d77dc2f13d2a7fd';
 const REFRESH_TOKEN_KEY = 'a53406e1e82fc55d1e59d4c54a0428738c0154669285e6df755d619ed3564ca6';
 const USER_STORAGE_KEY = '7f8a2b1c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0';
-const DEFAULT_NFSE_VERSION = process.env.NEXT_PUBLIC_NFSE_VERSION || 'v1';
+const DEFAULT_NFSE_VERSION = process.env.NEXT_PUBLIC_NFSE_VERSION || 'v2';
 
 // Access token em memória (não persiste em localStorage)
 let accessToken = null;
@@ -153,78 +153,78 @@ export const authApi = {
 };
 
 export const nfseApi = {
-  emitir: (dados, nfseVersion = 'v1') => {
-    if (nfseVersion === 'v2') return api.post('/nfse/emitir-completo', dados);
+  emitir: (dados, nfseVersion = DEFAULT_NFSE_VERSION) => {
+    if (nfseVersion === 'v2') return api.post('/nfse/v2/emitir-completo', dados);
     return api.post('/nfse/emitir', dados);
   },
   consultarPorRps: (numero, serie = 'A1', tipo = 1) => {
     const nfseVersion = getNfseVersion();
     if (nfseVersion === 'v1') return api.get(`/nfse/consultar/rps/${numero}`, { params: { serie, tipo } });
-    return api.get(`/v2/nfse/consultar/dps/${numero}`, { params: { serie } });
+    return api.get(`/nfse/v2/consultar/dps/${numero}`, { params: { serie } });
   },
   consultarPorFaixa: (inicio, fim, pagina = 1) => {
     const nfseVersion = getNfseVersion();
     if (nfseVersion === 'v1') return api.get('/nfse/consultar/faixa', { params: { numeroInicial: inicio, numeroFinal: fim, pagina } });
-    return api.get('/v2/nfse/consultar/faixa', { params: { inicio, fim, pagina } });
+    return api.get('/nfse/v2/consultar/faixa', { params: { inicio, fim, pagina } });
   },
   consultarPrestadas: (pagina = 1, dataInicial, dataFinal) => {
     const nfseVersion = getNfseVersion();
     if (nfseVersion === 'v1') return api.get('/nfse/consultar/prestados', { params: { pagina, dataInicial, dataFinal } });
-    return api.get('/v2/nfse/consultar/prestados', { params: { pagina, dataInicial, dataFinal } });
+    return api.get('/nfse/v2/consultar/prestados', { params: { pagina, dataInicial, dataFinal } });
   },
   consultarTomados: (pagina = 1, dataInicial, dataFinal, cnpj) => {
     const nfseVersion = getNfseVersion();
     if (nfseVersion === 'v1') return api.get('/nfse/consultar/tomados', { params: { pagina, dataInicial, dataFinal, cnpj } });
-    return api.get('/v2/nfse/consultar/tomados', { params: { pagina, dataInicial, dataFinal, cnpj } });
+    return api.get('/nfse/v2/consultar/tomados', { params: { pagina, dataInicial, dataFinal, cnpj } });
   },
   consultarPorDps: (numero, serie = '00001') =>
-    api.get(`/v2/nfse/consultar/dps/${numero}`, { params: { serie } }),
+    api.get(`/nfse/v2/consultar/dps/${numero}`, { params: { serie } }),
   dadosCadastrais: () => {
     const nfseVersion = getNfseVersion();
     if (nfseVersion === 'v1') return api.get('/nfse/dados-cadastrais');
-    return api.get('/v2/nfse/dados-cadastrais');
+    return api.get('/nfse/v2/dados-cadastrais');
   },
   dpsDisponivel: (pagina = 1) => {
     const nfseVersion = getNfseVersion();
     if (nfseVersion === 'v1') return api.get('/nfse/dps-disponivel', { params: { pagina } });
-    return api.get('/v2/nfse/dps-disponivel', { params: { pagina } });
+    return api.get('/nfse/v2/dps-disponivel', { params: { pagina } });
   },
   cancelar: (dados) => {
     const nfseVersion = getNfseVersion();
     if (nfseVersion === 'v1') return api.post('/nfse/cancelar', dados);
-    return api.post('/v2/nfse/cancelar', dados);
+    return api.post('/nfse/v2/cancelar', dados);
   },
   substituir: (dados) => {
     const nfseVersion = getNfseVersion();
     if (nfseVersion === 'v1') return api.post('/nfse/substituir', dados);
-    return api.post('/v2/nfse/substituir', dados);
+    return api.post('/nfse/v2/substituir', dados);
   },
   enviarLote: (listaDps, numeroLote) => {
     const nfseVersion = getNfseVersion();
     if (nfseVersion === 'v1') return api.post('/nfse/lote', { listaDps, numeroLote });
-    return api.post('/v2/nfse/lote', { listaDps, numeroLote });
+    return api.post('/nfse/v2/lote', { listaDps, numeroLote });
   },
   enviarLoteSincrono: (listaDps, numeroLote) => {
     const nfseVersion = getNfseVersion();
     if (nfseVersion === 'v1') return api.post('/nfse/lote/sincrono', { listaDps, numeroLote });
-    return api.post('/v2/nfse/lote/sincrono', { listaDps, numeroLote });
+    return api.post('/nfse/v2/lote/sincrono', { listaDps, numeroLote });
   },
   consultarLote: (protocolo) => {
     const nfseVersion = getNfseVersion();
     if (nfseVersion === 'v1') return api.get(`/nfse/consultar/lote/${protocolo}`);
-    return api.get(`/v2/nfse/consultar/lote/${protocolo}`);
+    return api.get(`/nfse/v2/consultar/lote/${protocolo}`);
   },
   consultarSituacaoLote: (protocolo) => {
     const nfseVersion = getNfseVersion();
     if (nfseVersion === 'v1') return api.get(`/nfse/consultar/situacao-lote/${protocolo}`);
-    return api.get(`/v2/nfse/consultar/situacao-lote/${protocolo}`);
+    return api.get(`/nfse/v2/consultar/situacao-lote/${protocolo}`);
   },
   consultarUrlNfse: (numero) => {
     const nfseVersion = getNfseVersion();
     if (nfseVersion === 'v1') {
       return Promise.reject(new Error('Consultar URL da NFS-e está disponível apenas para v2.'));
     }
-    return api.get(`/v2/nfse/consultar/url/${numero}`);
+    return api.get(`/nfse/v2/consultar/url/${numero}`);
   },
   config: {
     obterNfseUi: () => api.get('/config/nfse-ui'),
